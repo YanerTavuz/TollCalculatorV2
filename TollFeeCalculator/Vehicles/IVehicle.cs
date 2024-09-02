@@ -9,4 +9,9 @@ public interface IVehicle
     /// Specifies which type of vehicle it is
     /// </summary>
     VehicleType TypeOfVehicle { get; }
+
+    /// <summary>
+    /// Specifies if the vehicle is tollfree
+    /// </summary>
+    bool TollFree { get; }
 }

@@ -25,7 +25,7 @@ public static class TollCalculator
         if (dates.Select(DateOnly.FromDateTime).Distinct().Count() > 1)
             throw new ArgumentException("The dates for the passages differ in what date it is.", nameof(dates));
         
-        if (IsTollFreeVehicle(vehicle) || dates.Length == 0 || IsTollFreeDate(dates[0]))
+        if (vehicle.TollFree || dates.Length == 0 || IsTollFreeDate(dates[0]))
             return 0;
 
         var totalFee = CalculateTotalFee(dates);
@@ -83,20 +83,6 @@ public static class TollCalculator
         }
 
         return totalFee;
-    }
-
-    /// <summary>
-    /// Checks if the vehicle is toll-free.
-    /// </summary>
-    /// <param name="vehicle">The vehicle.</param>
-    /// <returns><see langword="true"/> if vehicle is toll-free, otherwise <see langword="false"/>.</returns>
-    private static bool IsTollFreeVehicle(IVehicle vehicle)
-    {
-        return vehicle?.TypeOfVehicle switch
-        {
-            VehicleType.Motorbike or VehicleType.Tractor or VehicleType.Emergency or VehicleType.Diplomat or VehicleType.Foreign or VehicleType.Military => true,
-            _ => false
-        };
     }
 
     /// <summary>
