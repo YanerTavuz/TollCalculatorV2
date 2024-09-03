@@ -158,13 +158,10 @@ public class TollCalculatorTests
     }
 
     [Fact]
-    public void GetTollFee_NoDates_Returns0()
-    {
-        DateTime[] dates = [];
+    public void GetTollFee_NoDates_Throws()
+   {
 
-        var actual = TollCalculator.GetTollFee(new Vehicle(VehicleType.Car), dates);
-
-        Assert.Equal(0, actual);
+        Assert.Throws<ArgumentNullException>(() => TollCalculator.GetTollFee(new Vehicle(VehicleType.Car), []));
     }
 
     [Fact]

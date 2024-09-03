@@ -16,17 +16,17 @@ public static class TollCalculator
     /// <returns>The total toll fee for that day.</returns>
     public static int GetTollFee(IVehicle vehicle, DateTime[] dates)
     {
+        if (dates == null || dates.Length == 0)
+           throw new ArgumentNullException(nameof(dates), "Dates were null or empty.");
+
         if (vehicle is null)
-            throw new ArgumentNullException(nameof(vehicle), "Vehicle was null.");
+           throw new ArgumentNullException(nameof(vehicle), "Vehicle was null.");
 
-        if (dates is null)
-            throw new ArgumentNullException(nameof(dates), "Dates were null or empty.");
+        if (dates.Select(d => d.Date).Distinct().Count() > 1)
+           throw new ArgumentException("All dates must be on the same day.", nameof(dates));
 
-        if (dates.Select(DateOnly.FromDateTime).Distinct().Count() > 1)
-            throw new ArgumentException("The dates for the passages differ in what date it is.", nameof(dates));
-        
-        if (vehicle.TollFree || dates.Length == 0 || IsTollFreeDate(dates[0]))
-            return 0;
+        if (vehicle.TollFree || IsTollFreeDate(dates[0]))
+           return 0;
 
         var totalFee = CalculateTotalFee(dates);
         return Math.Min(totalFee, MaxFee); // Ensure the fee does not exceed the max fee.
