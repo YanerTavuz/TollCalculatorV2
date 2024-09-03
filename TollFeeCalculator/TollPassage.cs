@@ -9,7 +9,7 @@ public class TollPassage(DateTime timeOfPassage)
         get
         {
             // Extract the time part from the DateTime as a TimeOnly
-            var time = TimeOnly.FromDateTime(TimeOfPassage); // This might cause an issue when it comes to milliseconds
+            var time = TimeOnly.FromDateTime(TimeOfPassage);
 
             // Here I almost missed the milliseconds where the passage might be between 59 seconds and 00 seconds
             return time switch
