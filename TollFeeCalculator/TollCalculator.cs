@@ -17,7 +17,7 @@ public static class TollCalculator
    /// <returns>The total toll fee for that day.</returns>
    public static int GetTollFee(IVehicle vehicle, DateTime[] dates)
    {
-      if (dates == null || dates.Length == 0)
+      if (dates is null || dates.Length == 0)
          throw new ArgumentNullException(nameof(dates), "Dates were null or empty.");
 
       if (vehicle is null)
@@ -45,28 +45,24 @@ public static class TollCalculator
                .OrderBy(p => p.TimeOfPassage)
                .ToList();
 
-      int totalFee = 0;
+      var totalFee = 0;
 
-      foreach (var tollpassage in tollPassages)
+      foreach (var tollPassage in tollPassages)
       {
-         if (tollpassage.Processed)
-         {
-            continue;
-         }
+         if (tollPassage.Processed) continue;
 
-         var intervalEnd = tollpassage.TimeOfPassage.AddMinutes(60);
+         var intervalEnd = tollPassage.TimeOfPassage.AddMinutes(60);
 
          // As the passages are ordered, TakeWhile will only process tollPassages until it reaches the intervalEnd and does not process the rest.
          var intervalPassages = tollPassages
                .TakeWhile(p => p.TimeOfPassage <= intervalEnd)
                .ToList();
 
-         var maxFeeInInterval = intervalPassages.Max(p => p.Fee);
-
-         totalFee += maxFeeInInterval;
+         // Add the max fee for the interval to the total fee
+         totalFee += intervalPassages.Max(p => p.Fee);
 
          foreach (var passage in intervalPassages)
-            passage.Processed = true;
+            passage.SetToProcessed();
          
          // Early exit if the total fee exceeds the max fee
          if (totalFee >= MaxFee)

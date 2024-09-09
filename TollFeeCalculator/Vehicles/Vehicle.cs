@@ -8,7 +8,6 @@ public class Vehicle : IVehicle
    public VehicleType TypeOfVehicle { get; }
 
    public bool TollFree { get; }
-
    
    public Vehicle(VehicleType typeOfVehicle)
    {
