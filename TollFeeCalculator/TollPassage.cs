@@ -10,7 +10,7 @@ public class TollPassage
     {
         // Set properties once to avoid calculating value each time property is accessed 
         TimeOfPassage = timeOfPassage;
-        Fee = CalculateFee();
+        Fee = CalculateFee(timeOfPassage);
     }
 
     public void SetToProcessed()
@@ -18,10 +18,10 @@ public class TollPassage
         Processed = true;
     }
     
-    private int CalculateFee()
+    private int CalculateFee(DateTime timeOfPassage)
     {
         // Extract the time part from the DateTime as a TimeOnly
-        var time = TimeOnly.FromDateTime(TimeOfPassage);
+        var time = TimeOnly.FromDateTime(timeOfPassage);
 
         // Here I almost missed the milliseconds where the passage might be between 59 seconds and 00 seconds
         return time switch
